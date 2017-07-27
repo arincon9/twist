@@ -1,7 +1,7 @@
 Twist::Application.routes.draw do
   devise_for :users
 
-  root to: "books#index"
+  root to: "home#index"
 
   notes_routes = lambda do
     collection do
@@ -13,7 +13,7 @@ Twist::Application.routes.draw do
       put :reject
       put :reopen
     end
-    
+
     resources :comments
   end
 
@@ -21,17 +21,19 @@ Twist::Application.routes.draw do
     member do
       post :receive
     end
-    
+
     resources :chapters do
       resources :elements do
         resources :notes
       end
-        
+
       resources :notes, &notes_routes
     end
-    
+
     resources :notes, &notes_routes
   end
-  
+
   get 'signed_out', to: "users#signed_out"
+  get "/accounts/new", to: "accounts#new", as: :new_account
+  post "/accounts", to: "accounts#create", as: :accounts
 end
